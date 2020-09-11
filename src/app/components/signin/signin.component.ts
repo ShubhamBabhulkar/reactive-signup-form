@@ -7,15 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SigninComponent implements OnInit {
   userSatus: string;
+  isScubscribe = localStorage.getItem('isScubscribe');
 
   constructor() { }
 
   ngOnInit() {
-    if (localStorage.getItem('isScubscribe')) {
-      this.userSatus = 'You are login Successfully and News letter Subscrribed successfully';
-    } else {
-      this.userSatus = 'You are login Successfully';
-    }
+    console.log(this.isScubscribe);
+    setTimeout( () => {
+      if (this.isScubscribe) {
+        this.userSatus = 'You are login Successfully and News letter Subscrribed successfully';
+      } else {
+        this.userSatus = 'You are login Successfully';
+      }
+    }, 1000);
   }
 
 }

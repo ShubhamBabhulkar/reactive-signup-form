@@ -1,3 +1,4 @@
+import { AuthService } from './../../service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,13 +29,16 @@ export class NewsDashboarComponent implements OnInit {
       Validators.maxLength(10),
       Validators.minLength(10),
     ]),
-    password: new FormControl('', [
+    password: new FormControl('Asdhjdkdjk%^%$%', [
       Validators.required,
       Validators.pattern('(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*?&#^])[A-Za-z\d$@$!%*?&].{8,}')
     ]),
-    scubscribe: new FormControl('')
+    scubscribe: new FormControl(false)
   });
-  constructor(private router: Router) { }
+  isErrorMessage: any;
+  constructor(
+    private router: Router,
+    private authService: AuthService ) { }
 
   ngOnInit() {
     localStorage.clear();
@@ -45,8 +49,13 @@ export class NewsDashboarComponent implements OnInit {
   }
 
   userSignup = (userData) => {
-    localStorage.setItem('isScubscribe', userData.scubscribe);
-    this.router.navigateByUrl('/signin');
+    this.isErrorMessage = '';
+    this.authService.signUp(userData).subscribe(data => {
+      localStorage.setItem('isScubscribe', data['scubscribe']);
+      this.router.navigateByUrl('/signin');
+    }, error => {
+      this.isErrorMessage = error.error.message;
+    });
   }
 
 }
